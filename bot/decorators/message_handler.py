@@ -1,6 +1,5 @@
 from typing import Optional, Any
 
-from loguru import logger
 from telegram import Update
 from telegram.ext import MessageHandler, filters, ContextTypes
 

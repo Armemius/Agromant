@@ -1,12 +1,16 @@
 import time
 
-from telegram import Update, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
 
 from decorators.command_handler import command_handler
-from utils.constants import PROFILE_KEYBOARD_BUTTON, SUBSCRIPTION_KEYBOARD_BUTTON, HELP_KEYBOARD_BUTTON, \
+from utils.constants import (
+    PROFILE_KEYBOARD_BUTTON,
+    SUBSCRIPTION_KEYBOARD_BUTTON,
+    HELP_KEYBOARD_BUTTON,
     SUPPORT_KEYBOARD_BUTTON
+)
 
 
 @command_handler(name="start")

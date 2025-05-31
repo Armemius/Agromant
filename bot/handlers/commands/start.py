@@ -43,10 +43,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         keyboard=[
             [
                 PROFILE_KEYBOARD_BUTTON,
-                SUBSCRIPTION_KEYBOARD_BUTTON
             ],
             [
-                HELP_KEYBOARD_BUTTON
+                HELP_KEYBOARD_BUTTON,
+                SUBSCRIPTION_KEYBOARD_BUTTON
             ],
             [
                 SUPPORT_KEYBOARD_BUTTON

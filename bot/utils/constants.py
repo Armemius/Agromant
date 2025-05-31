@@ -1,0 +1,6 @@
+# Keyboard buttons
+
+PROFILE_KEYBOARD_BUTTON = "Профиль"
+SUBSCRIPTION_KEYBOARD_BUTTON = "Подписка"
+HELP_KEYBOARD_BUTTON = "Справка"
+SUPPORT_KEYBOARD_BUTTON = "Поддержка"

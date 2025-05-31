@@ -1,3 +1,4 @@
+from loguru import logger
 from telegram import Update
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
@@ -25,7 +26,16 @@ async def default_message_handler(update: Update, context: ContextTypes.DEFAULT_
     message = await update.message.reply_text("🌱 Обрабатываю, подожди немного...")
 
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
-    text = process_plant_analysis(images)
+    try:
+        text = await process_plant_analysis(images)
+    except RuntimeError:
+        logger.exception("Failed to process plant analysis")
+        await update.message.reply_text(
+            """
+К сожалению, при обработке фотографий возникла ошибка. Пожалуйста, попробуй отправить фотографии ещё раз 😔
+            """
+        )
+        return
 
     await update.message.reply_text(
         text,

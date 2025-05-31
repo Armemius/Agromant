@@ -1,9 +1,11 @@
+import asyncio
 import base64
 from typing import List, Tuple
 
 import cv2
 import numpy as np
-from openai import OpenAI
+from loguru import logger
+from openai import OpenAI, BadRequestError
 
 from utils.config import bot_config
 
@@ -44,10 +46,20 @@ def gen_request(images: List[Tuple[np.ndarray, str]]) -> List:
     ]
 
 
-def process_plant_analysis(images: List[Tuple[np.ndarray, str]]):
-    response = client.responses.create(
-        model="o4-mini",
-        input=gen_request(images),
-    )
+async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]):
+    tries = 5
+    response = None
+    while response is None:
+        try:
+            response = client.responses.create(
+                model="o4-mini",
+                input=gen_request(images)
+            )
+        except BadRequestError as e:
+            await asyncio.sleep(0.5)
+            logger.error(f"Error processing plant analysis: {e}, reties left: {tries}")
+            tries -= 1
+            if tries == 0:
+                raise RuntimeError("Failed to process plant analysis after multiple attempts.")
 
     return response.output[1].content[0].text

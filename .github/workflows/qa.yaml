@@ -1,4 +1,4 @@
-name: QA
+name: 🧹 Quality check
 
 on:
   push:
@@ -8,27 +8,31 @@ on:
 
 jobs:
   markdown-lint:
+    name: "📚 Markdown Lint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "📥 Checkout code"
+        uses: actions/checkout@v4
 
-      - name: Lint Markdown
+      - name: "🔍 Lint README.md"
         uses: DavidAnson/markdownlint-cli2-action@v14
         with:
-          globs: README.md
+          globs: README.md # change to "**/*.md" to scan every Markdown file
 
   python-lint:
+    name: "🐍 Ruff Lint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "📥 Checkout code"
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: "⚙️  Set up Python"
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Install Ruff
+      - name: "📦 Install Ruff"
         run: pip install --upgrade ruff
 
-      - name: Lint Python in /bot
-        run: ruff bot/
+      - name: "🧹 Ruff check /bot"
+        run: ruff check bot/

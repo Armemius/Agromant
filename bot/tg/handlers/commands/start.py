@@ -4,6 +4,7 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
 
+from services import user_service
 from tg.decorators.command_handler import command_handler
 from tg.utils.constants import (
     PROFILE_KEYBOARD_BUTTON,
@@ -17,6 +18,7 @@ from tg.utils.constants import (
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handler for /start command"""
     user_id = update.effective_user.id
+    await user_service.register_if_needed(user_id)
 
     await update.message.reply_text(
         text="""

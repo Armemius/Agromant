@@ -3,6 +3,7 @@ from telegram import Update
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
 
+from services import plant_scan_service, user_service
 from tg.decorators.message_handler import message_handler
 from tg.utils.plant_analyzer import process_plant_analysis
 from tg.utils.telegram_media_downloader import get_message_images
@@ -23,11 +24,32 @@ async def default_message_handler(update: Update, context: ContextTypes.DEFAULT_
     if not images:
         return
 
+    quota_check = await user_service.check_quota(
+        tg_id=update.effective_user.id,
+        images_count=len(images)
+    )
+
+    if not quota_check:
+        await update.message.reply_text(
+            """
+К сожалению, у тебя закончились бесплатные запросы на анализ растений 🥺
+Для продолжения использования бота, пожалуйста, купи подписку
+            """,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+        return
+
     message = await update.message.reply_text("🌱 Обрабатываю, подожди немного...")
 
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     try:
-        text = await process_plant_analysis(images)
+        input_tokens, output_tokens, text = await process_plant_analysis(images)
+        await plant_scan_service.create_scan(
+            user_id=update.effective_user.id,
+            images_count=len(images),
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )
     except RuntimeError:
         logger.exception("Failed to process plant analysis")
         await update.message.reply_text(
@@ -41,4 +63,10 @@ async def default_message_handler(update: Update, context: ContextTypes.DEFAULT_
         text,
         parse_mode=ParseMode.MARKDOWN,
     )
+
+    await user_service.consume_request(
+        tg_id=update.effective_user.id,
+        images_count=len(images)
+    )
+
     await message.delete()

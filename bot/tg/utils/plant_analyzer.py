@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import json
 from typing import List, Tuple
 
 import cv2
@@ -17,12 +18,14 @@ client = OpenAI(
 with open("resources/plant_analysis/prompt.txt", "r", encoding="utf-8") as file:
     prompt = file.read()
 
+
 def gen_base64_image(image: np.ndarray) -> str:
     success, jpeg_arr = cv2.imencode(".jpg", image, params=[cv2.IMWRITE_JPEG_QUALITY, 95])
     if not success:
         raise RuntimeError("JPEG encoding failed.")
 
     return "data:image/jpeg;base64," + base64.b64encode(jpeg_arr.tobytes()).decode(encoding="utf-8")
+
 
 def gen_request(images: List[Tuple[np.ndarray, str]]) -> List:
     return [
@@ -46,7 +49,7 @@ def gen_request(images: List[Tuple[np.ndarray, str]]) -> List:
     ]
 
 
-async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]):
+async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]) -> Tuple[int, int, str]:
     tries = 5
     response = None
     while response is None:
@@ -62,4 +65,10 @@ async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]):
             if tries == 0:
                 raise RuntimeError("Failed to process plant analysis after multiple attempts.")
 
-    return response.output[1].content[0].text
+
+
+    return (
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        response.output[1].content[0].text
+    )

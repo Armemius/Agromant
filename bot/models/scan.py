@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from pydantic import BaseModel, PositiveFloat, model_validator, Field, PositiveInt
+from pydantic import BaseModel, PositiveFloat, Field, PositiveInt
 
 
 class PlantScan(BaseModel):

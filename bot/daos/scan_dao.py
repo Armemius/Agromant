@@ -1,6 +1,4 @@
-from typing import Optional
 
-from bson import Int64
 from motor.motor_asyncio import AsyncIOMotorCollection
 
 from models.scan import PlantScan

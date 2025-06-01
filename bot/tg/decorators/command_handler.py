@@ -18,6 +18,7 @@ def command_handler(name: str, aliases: list = None):
     :param name: The name of the command (e.g., 'start', 'help')
     :param aliases: A list of aliases for the command (e.g., ['begin', 'go'])
     """
+
     def decorator(func):
         command_handlers[name] = CommandHandler(name, func)
         commands_map[name] = func
@@ -40,7 +41,6 @@ def register_command_handlers(application: Application):
     for cmd, handler in command_handlers.items():
         logger.debug(f"Registering command handler for '{cmd}'")
         application.add_handler(handler)
-
 
 
 def get_alias_handler(alias: str):

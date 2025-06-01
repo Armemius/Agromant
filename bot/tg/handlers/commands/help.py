@@ -5,7 +5,6 @@ from telegram.ext import ContextTypes
 from tg.decorators.command_handler import command_handler
 from tg.utils.constants import HELP_KEYBOARD_BUTTON
 
-
 with open("resources/demo.mp4", "rb") as file:
     DEMO_VIDEO = file.read()
 

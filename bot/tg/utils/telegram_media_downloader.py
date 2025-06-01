@@ -11,6 +11,7 @@ from telegram.ext import ContextTypes
 
 album_cache = defaultdict(list)
 
+
 async def download_photo(
         update: Update, context: ContextTypes.DEFAULT_TYPE, message: Optional[Message] = None
 ) -> Tuple[np.ndarray, str]:

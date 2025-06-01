@@ -1,4 +1,3 @@
-
 from motor.motor_asyncio import AsyncIOMotorCollection
 
 from models.scan import PlantScan

@@ -64,8 +64,6 @@ async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]) -> Tuple[
             if tries == 0:
                 raise RuntimeError("Failed to process plant analysis after multiple attempts.")
 
-
-
     return (
         response.usage.input_tokens,
         response.usage.output_tokens,

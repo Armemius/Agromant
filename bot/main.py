@@ -3,7 +3,6 @@ import inspect
 import pkgutil
 
 from loguru import logger
-
 from tg import handlers
 from tg.decorators.message_handler import register_message_handler
 from tg.decorators.command_handler import register_command_handlers
@@ -17,6 +16,7 @@ def load_all_modules():
         module = importlib.import_module(module_name)
         for _ in inspect.getmembers(module):
             pass
+
 
 def init():
     """

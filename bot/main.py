@@ -4,10 +4,10 @@ import pkgutil
 
 from loguru import logger
 
-import handlers
-from decorators.message_handler import register_message_handler
-from decorators.command_handler import register_command_handlers
-from utils.config import init_config, bot_config
+from tg import handlers
+from tg.decorators.message_handler import register_message_handler
+from tg.decorators.command_handler import register_command_handlers
+from tg.utils.config import init_config, bot_config
 
 
 def load_all_modules():

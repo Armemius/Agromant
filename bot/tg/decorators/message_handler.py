@@ -1,9 +1,9 @@
 from typing import Optional, Any
 
 from telegram import Update
-from telegram.ext import MessageHandler, filters, ContextTypes
+from telegram.ext import ContextTypes, MessageHandler, filters
 
-from decorators.command_handler import get_alias_handler
+from tg.decorators.command_handler import get_alias_handler
 
 message_handler_func: Optional[Any] = None
 
@@ -14,6 +14,7 @@ def message_handler(func):
     global message_handler_func
     message_handler_func = func
     return func
+
 
 async def message_processing(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Process incoming messages and route them to the appropriate handler."""
@@ -29,6 +30,7 @@ async def message_processing(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if message_handler_func is not None:
         await message_handler_func(update, context)
         return
+
 
 def register_message_handler(application):
     """

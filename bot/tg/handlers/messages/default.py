@@ -3,9 +3,9 @@ from telegram import Update
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
 
-from decorators.message_handler import message_handler
-from utils.plant_analyzer import process_plant_analysis
-from utils.telegram_media_downloader import get_message_images
+from tg.decorators.message_handler import message_handler
+from tg.utils.plant_analyzer import process_plant_analysis
+from tg.utils.telegram_media_downloader import get_message_images
 
 
 @message_handler

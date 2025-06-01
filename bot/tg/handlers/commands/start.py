@@ -4,8 +4,8 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ContextTypes
 
-from decorators.command_handler import command_handler
-from utils.constants import (
+from tg.decorators.command_handler import command_handler
+from tg.utils.constants import (
     PROFILE_KEYBOARD_BUTTON,
     SUBSCRIPTION_KEYBOARD_BUTTON,
     HELP_KEYBOARD_BUTTON,

@@ -2,8 +2,8 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
-from decorators.command_handler import command_handler
-from utils.constants import SUPPORT_KEYBOARD_BUTTON
+from tg.decorators.command_handler import command_handler
+from tg.utils.constants import SUPPORT_KEYBOARD_BUTTON
 
 
 @command_handler(name="support", aliases=[SUPPORT_KEYBOARD_BUTTON])

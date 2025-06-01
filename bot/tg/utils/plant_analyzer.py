@@ -7,7 +7,7 @@ import numpy as np
 from loguru import logger
 from openai import OpenAI, BadRequestError
 
-from utils.config import bot_config
+from tg.utils.config import bot_config
 
 client = OpenAI(
     api_key=bot_config.proxyai_api,

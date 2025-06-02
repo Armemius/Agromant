@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
 from models.yookassa_notification import YookassaNotification
 from services import get_payment_service
@@ -8,7 +8,7 @@ from services import get_payment_service
 class PaymentController:
     def __init__(
             self,
-            server: FastAPI = FastAPI(),
+            server: FastAPI | APIRouter = FastAPI(),
     ):
         self.server = server
 

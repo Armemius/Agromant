@@ -3,7 +3,7 @@ import importlib
 import inspect
 import pkgutil
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from hypercorn import Config
 from hypercorn.asyncio import serve
 from loguru import logger
@@ -64,9 +64,12 @@ async def post_init(app: Application):
     await wire_services(db, app)
 
     server = FastAPI()
+    prefix_router = APIRouter(prefix="/api")
     config = Config()
-    config.bind = "0.0.0.0:8080"
-    PaymentController(server).register_routes()
+    config.bind = "0.0.0.0:8000"
+    PaymentController(prefix_router).register_routes()
+    server.include_router(prefix_router)
+
     loop = asyncio.get_event_loop()
     loop.create_task(serve(server, config))
     loop.create_task(receipt_fetcher())

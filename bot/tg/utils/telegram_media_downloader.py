@@ -75,7 +75,7 @@ async def download_album(update: Update) -> List[Message]:
     try:
         album_cache[mgid].append(msg)
         await asyncio.sleep(ALBUM_TIMEOUT)
-        if album_cache[mgid][-1] is not msg:
+        if album_cache.get(mgid, [-1])[-1] is not msg:
             return []
 
         album = album_cache.pop(mgid)

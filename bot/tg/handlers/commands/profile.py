@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
-from services import user_service
+from services import get_user_service
 from tg.decorators.command_handler import command_handler
 from tg.utils.constants import PROFILE_KEYBOARD_BUTTON
 
@@ -11,6 +11,7 @@ from tg.utils.constants import PROFILE_KEYBOARD_BUTTON
 async def profile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id: int = update.effective_user.id
     await update.message.delete()
+    user_service = await get_user_service()
 
     await update.message.reply_text(
         f"""

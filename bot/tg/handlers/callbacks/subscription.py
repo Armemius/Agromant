@@ -2,7 +2,7 @@ from telegram import Update, CallbackQuery, InlineKeyboardMarkup, InlineKeyboard
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
-from services import payment_service
+from services import get_payment_service
 from tg.decorators.callback_handler import callback_handler
 from tg.utils.constants import SUBSCRIPTION_CALLBACK
 from tg.utils.yookassa import create_payment_url
@@ -41,6 +41,7 @@ async def remove_activity_callback(
         reply_markup=layout,
     )
 
+    payment_service = await get_payment_service()
     await payment_service.create_payment(
         user_id=user_id,
         message_id=message.message_id,

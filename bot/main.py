@@ -3,6 +3,10 @@ import inspect
 import pkgutil
 
 from loguru import logger
+from motor.motor_asyncio import AsyncIOMotorClient
+from telegram.ext import Application
+
+from services import wire_services
 from tg import handlers
 from tg.decorators.callback_handler import register_callback_handlers
 from tg.decorators.message_handler import register_message_handler
@@ -29,6 +33,20 @@ def init():
     logger.info("Agromant bot initialized successfully")
 
 
+async def post_init(app: Application):
+    await app.initialize()
+
+    mongo_uri = "mongodb://{user}:{password}@{host}:{port}".format(
+        user=bot_config.mongo_username,
+        password=bot_config.mongo_password,
+        host=bot_config.mongo_host,
+        port=bot_config.mongo_port
+    )
+    mongo = AsyncIOMotorClient(mongo_uri)
+    db = mongo[bot_config.mongo_database]
+    await wire_services(db, app)
+
+
 def start_telegram_bot():
     """
     Start the Telegram bot application.
@@ -42,6 +60,7 @@ def start_telegram_bot():
     app = (
         ApplicationBuilder()
         .token(bot_config.bot_key)
+        .post_init(post_init)
         .concurrent_updates(1024)
         .write_timeout(999)
         .read_timeout(999)

@@ -1,10 +1,15 @@
+from telegram import InlineKeyboardMarkup
+from telegram.constants import ParseMode
+from telegram.ext import Application
+
 from daos.payment_dao import PaymentDAO
 from models.payment import Payment, PaymentStatus
 
 
 class PaymentService:
-    def __init__(self, dao: PaymentDAO):
+    def __init__(self, dao: PaymentDAO, app: Application):
         self._dao = dao
+        self._app = app
 
     async def create_payment(
             self,
@@ -15,7 +20,7 @@ class PaymentService:
             days: int
     ) -> Payment:
         payload = Payment(
-            id=payment_id,
+            _id=payment_id,
             user_id=user_id,
             message_id=message_id,
             amount=amount,
@@ -34,6 +39,20 @@ class PaymentService:
 
         payment.status = PaymentStatus.succeeded
         updated_payment = await self._dao.update(payment)
+
+        user_id = payment.user_id
+        message_id = payment.message_id
+        await self._app.bot.edit_message_text(
+            chat_id=user_id,
+            message_id=message_id,
+            text="""
+*Спасибо за платёж!*
+Ваша подписка активирована 🎉
+            """,
+            reply_markup=None,
+            parse_mode=ParseMode.MARKDOWN
+        )
+
         return updated_payment
 
     async def cancel_payment(

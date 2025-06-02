@@ -1,11 +1,16 @@
+import asyncio
 import importlib
 import inspect
 import pkgutil
 
+from fastapi import FastAPI
+from hypercorn import Config
+from hypercorn.asyncio import serve
 from loguru import logger
 from motor.motor_asyncio import AsyncIOMotorClient
 from telegram.ext import Application
 
+from api.payments import PaymentController
 from services import wire_services
 from tg import handlers
 from tg.decorators.callback_handler import register_callback_handlers
@@ -45,6 +50,13 @@ async def post_init(app: Application):
     mongo = AsyncIOMotorClient(mongo_uri)
     db = mongo[bot_config.mongo_database]
     await wire_services(db, app)
+
+    server = FastAPI()
+    config = Config()
+    config.bind = "0.0.0.0:8080"
+    PaymentController(server).register_routes()
+    loop = asyncio.get_event_loop()
+    loop.create_task(serve(server, config))
 
 
 def start_telegram_bot():

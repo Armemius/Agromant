@@ -1,4 +1,7 @@
-import functools, inspect, json, re
+import functools
+import inspect
+import json
+import re
 from typing import Optional
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes

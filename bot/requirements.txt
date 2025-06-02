@@ -8,3 +8,5 @@ python-dotenv==1.0.1
 python-telegram-bot[job-queue,webhooks]==22.0
 requests==2.32.3
 motor==3.7.1
+fastapi==0.115.12
+hypercorn==0.17.3

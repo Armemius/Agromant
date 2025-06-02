@@ -27,5 +27,6 @@
     "customer": {{
       "email": "payments@armemius.ru"
     }}
-  }}
+  }},
+  "save_payment_method": false
 }}

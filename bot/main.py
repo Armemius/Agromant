@@ -4,6 +4,7 @@ import pkgutil
 
 from loguru import logger
 from tg import handlers
+from tg.decorators.callback_handler import register_callback_handlers
 from tg.decorators.message_handler import register_message_handler
 from tg.decorators.command_handler import register_command_handlers
 from tg.utils.config import init_config, bot_config
@@ -48,6 +49,7 @@ def start_telegram_bot():
         .connect_timeout(999)
     ).build()
 
+    register_callback_handlers(app)
     register_command_handlers(app)
     register_message_handler(app)
 

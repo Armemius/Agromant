@@ -33,6 +33,8 @@ class Config:
         self.mongo_username = get_value("MONGO_ROOT_USERNAME", mandatory=True)
         self.mongo_password = get_value("MONGO_ROOT_PASSWORD", mandatory=True)
         self.mongo_database = get_value("MONGO_DATABASE", mandatory=True)
+        self.yookassa_shop_id = get_value("YOOKASSA_SHOP_ID", mandatory=True)
+        self.yookassa_secret_key = get_value("YOOKASSA_SECRET_KEY", mandatory=True)
 
 
 def init_config():

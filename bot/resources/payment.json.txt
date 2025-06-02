@@ -1,0 +1,31 @@
+{{
+  "amount": {{
+    "value": "{value}",
+    "currency": "RUB"
+  }},
+  "capture": true,
+  "confirmation": {{
+    "type": "redirect",
+    "return_url": "https://t.me/agromant_bot"
+  }},
+  "description": "{description}",
+  "receipt": {{
+    "items": [
+      {{
+        "description": "{description}",
+        "quantity": 1,
+        "amount": {{
+          "value": "{value}",
+          "currency": "RUB"
+        }},
+        "vat_code": 1,
+        "payment_mode": "full_prepayment",
+        "payment_subject": "commodity"
+      }}
+    ],
+    "tax_system_code": 1,
+    "customer": {{
+      "email": "payments@armemius.ru"
+    }}
+  }}
+}}

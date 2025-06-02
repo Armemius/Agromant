@@ -35,8 +35,6 @@ docker compose --profile production up -d
 
 Also you need to create `.env` file in `bot` directory with specified variables
 
-```env
-
 ### Manual
 
 - Install Python 3.13

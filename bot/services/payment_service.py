@@ -1,4 +1,3 @@
-from telegram import InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import Application
 

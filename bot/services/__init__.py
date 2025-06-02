@@ -1,7 +1,7 @@
 from typing import Optional
 
 from loguru import logger
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorDatabase
 from telegram.ext import Application
 
 from daos.payment_dao import PaymentDAO

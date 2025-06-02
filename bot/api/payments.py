@@ -1,9 +1,5 @@
-import json
 
-from fastapi import FastAPI, Body
-from hypercorn import Config
-from hypercorn.asyncio import serve
-from telegram.ext import Application
+from fastapi import FastAPI
 
 from models.yookassa_notification import YookassaNotification
 from services import get_payment_service

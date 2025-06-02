@@ -107,4 +107,4 @@ ME_CONFIG_BASICAUTH_PASSWORD=1234567890
 If the bot is running, you can try it out by sending a message to
 [@agromant_bot](https://t.me/agromant_bot)
 
-![Demo video](/assets/demo.mp4)
+![Demo video](/assets/demo.gif)

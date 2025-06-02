@@ -19,7 +19,7 @@ async def profile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 *ID*: {user_id}
 *Имя*: {update.effective_user.first_name}
 {
-        f"*Подписка до*: {await user_service.get_subscription_expiration(user_id)}"
+        f"*Подписка до*: {(await user_service.get_subscription_expiration(user_id)).strftime('%d.%m.%Y')}"
         if await user_service.has_valid_subscription(user_id)
         else "*Подписка*: не активна"
         }

@@ -1,8 +1,8 @@
-from typing import Optional
+from typing import Optional, List
 
 from motor.motor_asyncio import AsyncIOMotorCollection
 
-from models.payment import Payment
+from models.payment import Payment, PaymentStatus
 
 
 class PaymentDAO:
@@ -25,3 +25,19 @@ class PaymentDAO:
         if not doc:
             return None
         return Payment(**doc) if doc else None
+
+    async def get_all_payments_without_receipt(self) -> List[Payment]:
+        cursor = self._col.find({
+            "receipt_url": None,
+            "status": PaymentStatus.succeeded,
+        })
+        return [
+            Payment(**payment)
+            for payment in await cursor.to_list()
+        ]
+
+    async def attach_receipt_url(self, payment_id: str, receipt_url: str) -> None:
+        await self._col.update_one(
+            {"_id": payment_id},
+            {"$set": {"receipt_url": receipt_url}}
+        )

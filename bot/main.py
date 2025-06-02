@@ -11,7 +11,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from telegram.ext import Application
 
 from api.payments import PaymentController
-from services import wire_services
+from services import wire_services, get_payment_service
 from tg import handlers
 from tg.decorators.callback_handler import register_callback_handlers
 from tg.decorators.message_handler import register_message_handler
@@ -38,6 +38,18 @@ def init():
     logger.info("Agromant bot initialized successfully")
 
 
+async def receipt_fetcher():
+    while True:
+        try:
+            payment_service = await get_payment_service()
+            await payment_service.try_fetch_all_receipts()
+            await asyncio.sleep(10)
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            logger.exception(f"Unhandled exception: {e}")
+
+
 async def post_init(app: Application):
     await app.initialize()
 
@@ -57,6 +69,7 @@ async def post_init(app: Application):
     PaymentController(server).register_routes()
     loop = asyncio.get_event_loop()
     loop.create_task(serve(server, config))
+    loop.create_task(receipt_fetcher())
 
 
 def start_telegram_bot():

@@ -35,6 +35,7 @@ class Config:
         self.mongo_database = get_value("MONGO_DATABASE", mandatory=True)
         self.yookassa_shop_id = get_value("YOOKASSA_SHOP_ID", mandatory=True)
         self.yookassa_secret_key = get_value("YOOKASSA_SECRET_KEY", mandatory=True)
+        self.tin_numbers = get_value("TIN_NUMBERS", mandatory=True)
 
 
 def init_config():

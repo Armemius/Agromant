@@ -1,6 +1,6 @@
 # Agromant
 
-Recently I was trying to get a better paying job, but I got quite a small
+Recently I was trying to get a better paid job, but I got quite a small
 amount of public projects to show, cause they're all commercial or under NDA :3
 
 So I decided to create a public project, also commercial lol, which would be

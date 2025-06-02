@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from daos.user_dao import TgUserDAO
 from models.user import TgUser
@@ -28,7 +28,7 @@ class TgUserService:
             return False
         if user.subscription_till is None:
             return False
-        return user.subscription_till >= datetime.now(tz=timezone.utc)
+        return user.subscription_till >= datetime.now()
 
     async def get_subscription_expiration(self, tg_id: int) -> datetime | None:
         user = await self._dao.get(tg_id)
@@ -45,3 +45,14 @@ class TgUserService:
         if not user:
             return False
         return user.images_left >= images_count
+
+    async def add_subscription_days(self, tg_id: int, days: int) -> None:
+        user = await self._dao.get(tg_id)
+        if not user:
+            user = await self.register_if_needed(tg_id)
+
+        if user.subscription_till is None or user.subscription_till < datetime.now():
+            user.subscription_till = datetime.now()
+
+        user.subscription_till = user.subscription_till + timedelta(days=days)
+        await self._dao.update(user)

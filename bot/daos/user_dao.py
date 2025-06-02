@@ -18,6 +18,13 @@ class TgUserDAO:
         doc = await self._col.find_one({"_id": Int64(tg_id)})
         return TgUser(**doc) if doc else None
 
+    async def update(self, payload: TgUser) -> Optional[TgUser]:
+        await self._col.update_one(
+            {"_id": payload.id},
+            {"$set": payload.model_dump(by_alias=True)}
+        )
+        return TgUser(**payload.model_dump(by_alias=True))
+
     async def check_quota(self, tg_id: int, amount: int = 1) -> bool:
         doc = await self._col.find_one({"_id": Int64(tg_id), "images_left": {"$gte": amount}})
         return doc is not None

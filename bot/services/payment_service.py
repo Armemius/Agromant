@@ -6,7 +6,11 @@ from models.payment import Payment, PaymentStatus
 
 
 class PaymentService:
-    def __init__(self, dao: PaymentDAO, app: Application):
+    def __init__(
+            self,
+            dao: PaymentDAO,
+            app: Application
+    ) -> None:
         self._dao = dao
         self._app = app
 
@@ -35,6 +39,18 @@ class PaymentService:
         payment = await self._dao.get(payment_id)
         if not payment:
             raise ValueError("Payment not found")
+        if payment.status is PaymentStatus.succeeded:
+            raise ValueError("Payment already succeeded")
+
+        user_id = payment.user_id
+        subscription_days = payment.days
+
+        from services import get_user_service
+        user_service = await get_user_service()
+        await user_service.add_subscription_days(
+            tg_id=user_id,
+            days=subscription_days
+        )
 
         payment.status = PaymentStatus.succeeded
         updated_payment = await self._dao.update(payment)

@@ -1,0 +1,25 @@
+import json
+
+from fastapi import FastAPI, Body
+from hypercorn import Config
+from hypercorn.asyncio import serve
+from telegram.ext import Application
+
+from models.yookassa_notification import YookassaNotification
+from services import get_payment_service
+
+
+class PaymentController:
+    def __init__(
+            self,
+            server: FastAPI = FastAPI(),
+    ):
+        self.server = server
+
+    def register_routes(self):
+        @self.server.post("/payment")
+        async def process_payments(data: YookassaNotification):
+            print(data)
+            payment_id = data.object.id
+            payment_service = await get_payment_service()
+            await payment_service.confirm_payment(payment_id)

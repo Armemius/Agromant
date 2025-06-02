@@ -44,7 +44,6 @@ services:
       context: ./bot
       dockerfile: Dockerfile
     profiles:
-      - environment
       - development
     container_name: agromant_app
     restart: always

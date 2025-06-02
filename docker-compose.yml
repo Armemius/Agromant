@@ -45,6 +45,7 @@ services:
       dockerfile: Dockerfile
     profiles:
       - development
+      - production
     container_name: agromant_app
     restart: always
     env_file:

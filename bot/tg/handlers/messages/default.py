@@ -7,6 +7,7 @@ from telegram.ext import ContextTypes
 
 from services import get_user_service, get_plant_service
 from tg.decorators.message_handler import message_handler
+from tg.utils.plant_analyzer import process_plant_analysis
 from tg.utils.telegram_media_downloader import get_message_images
 
 
@@ -94,7 +95,7 @@ async def default_message_handler(update: Update, context: ContextTypes.DEFAULT_
 
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     try:
-        input_tokens, output_tokens, text = 1, 1, "Amogus"  # await process_plant_analysis(images)
+        input_tokens, output_tokens, text = await process_plant_analysis(images)
         await plant_scan_service.create_scan(
             user_id=user_id,
             images_count=len(images),

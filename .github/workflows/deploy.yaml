@@ -171,18 +171,17 @@ jobs:
 
       - name: "📥 Install Yandex Cloud CLI"
         run: |
-          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | sudo bash -s -- -i /usr/local/bin
-          echo "/usr/local/bin" >> $GITHUB_PATH
-          /usr/local/bin/yc --version
+          curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | \
+            bash -s -- -a
 
       - name: "🔑 Authorise yc CLI & select cloud"
         run: |
           echo "$YC_SA_KEY_JSON" > key.json
-          /usr/local/bin/yc config set service-account-key key.json
-          /usr/local/bin/yc config set cloud-id $YC_CLOUD_ID
-          /usr/local/bin/yc config set folder-id $YC_FOLDER_ID
+          yc config set service-account-key key.json
+          yc config set cloud-id $YC_CLOUD_ID
+          yc config set folder-id $YC_FOLDER_ID
 
       - name: "🚀 Deploy new revision"
         run: |
-          /usr/local/bin/yc serverless container update --id $YSC_CONTAINER_ID \
+          yc serverless container update --id $YSC_CONTAINER_ID \
             --revision-replace-image cr.yandex/$YCR_REGISTRY/agromant:$VERSION

@@ -160,11 +160,13 @@ jobs:
     needs: build-push
     env:
       YCR_REGISTRY: ${{ secrets.YCR_REGISTRY }}
+      YC_SA_ID: ${{ secrets.YC_SA_ID }}
       YC_SA_KEY_JSON: ${{ secrets.YC_SA_KEY_JSON }}
       YSC_CONTAINER_ID: ${{ secrets.YSC_CONTAINER_ID }}
       YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
       YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
       VERSION: ${{ needs.build-push.outputs.version }}
+      ENV_FILE_CONTENTS:  ${{ secrets.ENV_VARS }}
     steps:
       - name: "📥 Checkout code"
         uses: actions/checkout@v4
@@ -186,3 +188,17 @@ jobs:
         run: |
           /opt/yc/bin/yc serverless container update --id $YSC_CONTAINER_ID \
             --revision-replace-image cr.yandex/$YCR_REGISTRY/agromant:$VERSION
+          echo $ENV_FILE_CONTENTS > raw.env
+          awk '!/^\s*($|#)/ { printf "%s%s", sep, $0; sep="," } END { print "" }' raw.env > prepared.env
+          /opt/yc/bin/yc serverless container revision deploy \
+            --container-id $YSC_CONTAINER_ID \
+            --service-account-id $YC_SA_ID \
+            --image cr.yandex/$YCR_REGISTRY/agromant:$VERSION \
+            --memory 2GB \
+            --cores 1 \
+            --core-fraction 100 \
+            --execution-timeout 300s \
+            --concurrency 16 \
+            --min-instances 1 \
+            --runtime http \
+            --environment {cat prepared.env}

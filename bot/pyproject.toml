@@ -1,0 +1,41 @@
+# This file is used in pipeline, to build this manually place README.msd and VERSION.txt in the bot folder
+
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agromant"
+description = "Agromant Telegram-bot to help people care about their plants more"
+readme = "README.md"
+authors = [
+    { name = "Armemius", email = "armemius@armemius.ru" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "loguru==0.7.3",
+    "numpy==2.2.6",
+    "openai==1.66.3",
+    "opencv-python==4.11.0.86",
+    "pydantic==2.11.5",
+    "pymongo==4.12.0",
+    "python-dotenv==1.0.1",
+    "python-telegram-bot[job-queue,webhooks]==22.0",
+    "requests==2.32.3",
+    "motor==3.7.1",
+    "fastapi==0.115.12",
+    "hypercorn==0.17.3"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.4.0",
+    "pytest-cov==6.1.1",
+]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION.txt" }
+
+[tool.setuptools.packages.find]
+where = ["."]

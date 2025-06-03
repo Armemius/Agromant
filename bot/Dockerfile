@@ -17,6 +17,17 @@ RUN apt-get install build-essential g++ libgl1-mesa-glx libglib2.0-0 -y
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
+# Install Yandex MongoDB certificates
+
+RUN apt-get install wget -y
+RUN mkdir -p /.mongodb && \
+wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
+     --output-document /.mongodb/root.crt && \
+chmod 0644 /.mongodb/root.crt
+
+ENV MONGO_USE_SSL=true
+ENV MONGO_CERT_PATH=/.mongodb/root.crt
+
 # Create wrapper script to run reverse proxy & telegram bot
 
 COPY start.sh /start.sh

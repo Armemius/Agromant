@@ -53,13 +53,17 @@ async def receipt_fetcher():
 async def post_init(app: Application):
     await app.initialize()
 
-    mongo_uri = "mongodb://{user}:{password}@{host}:{port}".format(
+    mongo_uri = "mongodb://{user}:{password}@{host}:{port}/?authSource=admin".format(
         user=get_config().mongo_username,
         password=get_config().mongo_password,
         host=get_config().mongo_host,
         port=get_config().mongo_port
     )
-    mongo = AsyncIOMotorClient(mongo_uri)
+    mongo = AsyncIOMotorClient(
+        mongo_uri,
+        ssl=get_config().mongo_use_ssl,
+        tlsCAFile=get_config().mongo_cert_path
+    )
     db = mongo[get_config().mongo_database]
     await wire_services(db, app)
 

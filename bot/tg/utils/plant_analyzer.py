@@ -7,12 +7,7 @@ import numpy as np
 from loguru import logger
 from openai import OpenAI, BadRequestError
 
-from tg.utils.config import bot_config
-
-client = OpenAI(
-    api_key=bot_config.proxyai_api,
-    base_url="https://api.proxyapi.ru/openai/v1",
-)
+from tg.utils.config import get_config
 
 with open("resources/plant_analysis/prompt.txt", "r", encoding="utf-8") as file:
     prompt = file.read()
@@ -49,6 +44,11 @@ def gen_request(images: List[Tuple[np.ndarray, str]]) -> List:
 
 
 async def process_plant_analysis(images: List[Tuple[np.ndarray, str]]) -> Tuple[int, int, str]:
+    client = OpenAI(
+        api_key=get_config().proxyai_api,
+        base_url="https://api.proxyapi.ru/openai/v1",
+    )
+
     tries = 5
     response = None
     while response is None:

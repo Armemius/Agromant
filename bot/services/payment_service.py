@@ -10,12 +10,12 @@ from daos.payment_dao import PaymentDAO
 from models.payment import Payment, PaymentStatus
 from models.yookassa_payment_status import PaymentStatusDto
 from models.yookassa_receipt_status import ReceiptStatusDto
-from tg.utils.config import bot_config
+from tg.utils.config import get_config
 
 
 async def fetch_receipt(payment_id: str) -> str:
     yookassa_base_url = "https://api.yookassa.ru/v3"
-    auth = HTTPBasicAuth(bot_config.yookassa_shop_id, bot_config.yookassa_secret_key)
+    auth = HTTPBasicAuth(get_config().yookassa_shop_id, get_config().yookassa_secret_key)
     payment_status_response = requests.get(
         f"{yookassa_base_url}/receipts?payment_id={payment_id}",
         auth=auth
@@ -39,7 +39,7 @@ async def fetch_receipt(payment_id: str) -> str:
 
     return "{url}/{tin_numbers}/{fiscal_provider_id}/print".format(
         url="https://lknpd.nalog.ru/api/v1/receipt",
-        tin_numbers=bot_config.tin_numbers,
+        tin_numbers=get_config().tin_numbers,
         fiscal_provider_id=fiscal_provider_id,
     )
 

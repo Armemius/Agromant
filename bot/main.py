@@ -16,7 +16,7 @@ from tg import handlers
 from tg.decorators.callback_handler import register_callback_handlers
 from tg.decorators.message_handler import register_message_handler
 from tg.decorators.command_handler import register_command_handlers
-from tg.utils.config import init_config, bot_config
+from tg.utils.config import init_config, get_config
 
 
 def load_all_modules():
@@ -54,13 +54,13 @@ async def post_init(app: Application):
     await app.initialize()
 
     mongo_uri = "mongodb://{user}:{password}@{host}:{port}".format(
-        user=bot_config.mongo_username,
-        password=bot_config.mongo_password,
-        host=bot_config.mongo_host,
-        port=bot_config.mongo_port
+        user=get_config().mongo_username,
+        password=get_config().mongo_password,
+        host=get_config().mongo_host,
+        port=get_config().mongo_port
     )
     mongo = AsyncIOMotorClient(mongo_uri)
-    db = mongo[bot_config.mongo_database]
+    db = mongo[get_config().mongo_database]
     await wire_services(db, app)
 
     server = FastAPI()
@@ -87,7 +87,7 @@ def start_telegram_bot():
 
     app = (
         ApplicationBuilder()
-        .token(bot_config.bot_key)
+        .token(get_config().bot_key)
         .post_init(post_init)
         .concurrent_updates(1024)
         .write_timeout(999)
@@ -118,15 +118,15 @@ def start_telegram_bot():
         "web_app_data"
     ]
 
-    if bot_config.use_webhooks:
+    if get_config().use_webhooks:
         logger.info("Using webhooks")
         app.run_webhook(
             allowed_updates=allowed_updates,
-            webhook_url=bot_config.webhook_url,
-            url_path=bot_config.webhook_path,
-            max_connections=bot_config.webhook_connections,
+            webhook_url=get_config().webhook_url,
+            url_path=get_config().webhook_path,
+            max_connections=get_config().webhook_connections,
             listen="0.0.0.0",
-            port=bot_config.webhook_port,
+            port=get_config().webhook_port,
             drop_pending_updates=False,
         )
     else:

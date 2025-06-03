@@ -5,7 +5,7 @@ from typing import Tuple
 from requests import post
 from requests.auth import HTTPBasicAuth
 
-from tg.utils.config import bot_config
+from tg.utils.config import get_config
 
 with open("resources/payment.json.txt", "r", encoding="utf-8") as payment_info:
     payment = payment_info.read()
@@ -21,7 +21,7 @@ def create_payment_url(
             description=description
         )
     )
-    auth = HTTPBasicAuth(bot_config.yookassa_shop_id, bot_config.yookassa_secret_key)
+    auth = HTTPBasicAuth(get_config().yookassa_shop_id, get_config().yookassa_secret_key)
     idempotence_key = uuid.uuid4().hex
     response = post(
         "https://api.yookassa.ru/v3/payments",

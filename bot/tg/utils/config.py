@@ -40,6 +40,12 @@ class Config:
 
 def init_config():
     global bot_config
+    bot_config = Config()
 
 
-bot_config = Config()
+def get_config():
+    global bot_config
+    return bot_config
+
+
+bot_config = None

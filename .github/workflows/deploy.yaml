@@ -199,4 +199,4 @@ jobs:
             --concurrency 16 \
             --min-instances 1 \
             --runtime http \
-            --environment `{cat prepared.env}`
+            --environment "$(cat prepared.env)"

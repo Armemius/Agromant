@@ -186,8 +186,6 @@ jobs:
 
       - name: "🚀 Deploy new revision"
         run: |
-          /opt/yc/bin/yc serverless container update --id $YSC_CONTAINER_ID \
-            --revision-replace-image cr.yandex/$YCR_REGISTRY/agromant:$VERSION
           echo $ENV_FILE_CONTENTS > raw.env
           awk '!/^\s*($|#)/ { printf "%s%s", sep, $0; sep="," } END { print "" }' raw.env > prepared.env
           /opt/yc/bin/yc serverless container revision deploy \

@@ -1,7 +1,7 @@
 from enum import Enum
 
-from pydantic import BaseModel
-from typing import Dict, Any
+from pydantic import BaseModel, Field
+from typing import Dict, Any, Optional
 from datetime import datetime
 
 
@@ -15,39 +15,39 @@ class NotificationType(str, Enum):
 
 
 class Amount(BaseModel):
-    value: str
-    currency: str
+    value: Optional[str] = None
+    currency: Optional[str] = None
 
 
 class Recipient(BaseModel):
-    account_id: str
-    gateway_id: str
+    account_id: Optional[str] = None
+    gateway_id: Optional[str] = None
 
 
 class PaymentMethod(BaseModel):
-    type: str
-    id: str
-    saved: bool
-    status: str
-    title: str
-    account_number: str
+    type: Optional[str] = None
+    id: Optional[str] = None
+    saved: Optional[bool] = None
+    status: Optional[str] = None
+    title: Optional[str] = None
+    account_number: Optional[str] = None
 
 
 class PaymentObject(BaseModel):
-    id: str
-    status: str
-    amount: Amount
-    income_amount: Amount
-    description: str
-    recipient: Recipient
-    payment_method: PaymentMethod
-    captured_at: datetime
-    created_at: datetime
-    test: bool
-    refunded_amount: Amount
-    paid: bool
-    refundable: bool
-    metadata: Dict[str, Any]
+    id: Optional[str] = None
+    status: Optional[str] = None
+    amount: Optional[Amount] = None
+    income_amount: Optional[Amount] = None
+    description: Optional[str] = None
+    recipient: Optional[Recipient] = None
+    payment_method: Optional[PaymentMethod] = None
+    captured_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    test: Optional[bool] = None
+    refunded_amount: Optional[Amount] = None
+    paid: Optional[bool] = None
+    refundable: Optional[bool] = None
+    metadata: Optional[Dict[str, Any]] = None
 
 
 class YookassaNotification(BaseModel):

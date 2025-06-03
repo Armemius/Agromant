@@ -186,8 +186,6 @@ jobs:
 
       - name: "🚀 Deploy new revision"
         run: |
-          echo $ENV_FILE_CONTENTS > raw.env
-          awk '!/^\s*($|#)/ { printf "%s%s", sep, $0; sep="," } END { print "" }' raw.env > prepared.env
           /opt/yc/bin/yc serverless container revision deploy \
             --container-id $YSC_CONTAINER_ID \
             --service-account-id $YC_SA_ID \
@@ -199,4 +197,4 @@ jobs:
             --concurrency 16 \
             --min-instances 1 \
             --runtime http \
-            --environment "$(cat prepared.env)"
+            --environment $ENV_FILE_CONTENTS

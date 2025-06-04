@@ -155,7 +155,7 @@ jobs:
           docker push cr.yandex/$YCR_REGISTRY/agromant:latest
 
   deploy:
-    name: "⚙️ Update Serverless Container"
+    name: "⚙️ Update revision on VM"
     runs-on: ubuntu-latest
     needs: build-push
     env:
@@ -168,33 +168,13 @@ jobs:
       VERSION: ${{ needs.build-push.outputs.version }}
       ENV_FILE_CONTENTS:  ${{ secrets.ENV_VARS }}
     steps:
-      - name: "📥 Checkout code"
-        uses: actions/checkout@v4
-
-      - name: "📥 Install Yandex Cloud CLI"
-        run: |
-          curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | \
-            sudo bash -s -- -i /opt/yc -n
-          sudo chmod a+x /opt/yc/bin/yc
-
-      - name: "🔑 Authorise yc CLI & select cloud"
-        run: |
-          echo "$YC_SA_KEY_JSON" > key.json
-          /opt/yc/bin/yc config set service-account-key key.json
-          /opt/yc/bin/yc config set cloud-id $YC_CLOUD_ID
-          /opt/yc/bin/yc config set folder-id $YC_FOLDER_ID
-
-      - name: "🚀 Deploy new revision"
-        run: |
-          /opt/yc/bin/yc serverless container revision deploy \
-            --container-id $YSC_CONTAINER_ID \
-            --service-account-id $YC_SA_ID \
-            --image cr.yandex/$YCR_REGISTRY/agromant:$VERSION \
-            --memory 2GB \
-            --cores 1 \
-            --core-fraction 100 \
-            --execution-timeout 300s \
-            --concurrency 16 \
-            --min-instances 1 \
-            --runtime http \
-            --environment $ENV_FILE_CONTENTS
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          script: |
+              echo "Deploying version $VERSION to remote server"
+              export VERSION=$VERSION
+              docker compose up -d
